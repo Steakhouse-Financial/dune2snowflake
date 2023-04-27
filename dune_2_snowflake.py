@@ -112,8 +112,10 @@ if __name__ == "__main__":
     # Include hash column
     df_dune_Data['HASH_KEY'] = df_dune_Data.apply(hash_row, axis=1)
     print("Columns inserted to Snowflake are {}".format(df_dune_Data.columns))
+    print("No of records from Dune is {}".format(df_dune_Data.shape[0]))
     # Remove duplicates if exists
     df_dune_Data = df_dune_Data.drop_duplicates()
+    print("No of records from after removing duplicates is {}".format(df_dune_Data.shape[0]))
     # Prepare for Snowflake upsert
     id_columns = ['HASH_KEY']
     insert_columns = df_dune_Data.columns
@@ -125,6 +127,3 @@ if __name__ == "__main__":
     upsert_to_snowflake(df_dune_Data,id_columns,insert_columns,update_columns,table_name,stage_name)
     print("** Data pull from Dune and upsert to Snowflake completed.")
     print("Script execution completed at {}".format(datetime.now().strftime('%Y-%m-%d %H:%M:%S')))
-
-    ## add query,table and stage as part of arg pars
-    ## print no of records in df
