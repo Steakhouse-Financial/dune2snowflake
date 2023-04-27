@@ -100,9 +100,9 @@ if __name__ == "__main__":
     print("Data pull from Dune starting {}".format(date_to_pull))    
 
     # Define parameters needed
-    table_name = 'LIDO_DEV'
-    stage_name = 'STG_LIDO_DEV'
-    query_id = '2248762'
+    table_name = os.environ.get("TABLE_NAME")
+    stage_name = os.environ.get("STAGE_NAME")
+    query_id = os.environ.get("DUNE_QUERY_ID")
 
     # Pull data from Dune
     df_dune_Data = pull_data_from_dune(query_id,date_to_pull)
