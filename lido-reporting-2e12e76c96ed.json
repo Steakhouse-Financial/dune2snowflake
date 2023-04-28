@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "lido-reporting",
+  "private_key_id": "2e12e76c96edf04d8e7f597fd9c5f4ee142798e2",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQC94fbGeB2BQLQN\ntZfh84uzsppJ33QwIGnQUzx4xVT6phH16p0yLPl5tx+OSBSU/3ZJ/+CS+AgDpuOo\n2FeJD9/fA4jJrqndhRVHrr0YEBoRd8KTTyv1JGID1JotSkXuReE4qbEyq0vUts/z\nut8jYQ8/vp7CbcixxHdit7sxLk8HxnVULK0AT3FyCnCJ/eIkmNdxg1TYqTgzaZMG\nh0HpwnocoeHIPjUlrOc01SiECiS+ze1h8JFo1QuCZugHYsCYdAaDN49vcjMDiFDA\ngZb32CzgzQXk2NezAkMuz7oRle1/MlErH9bnbOHt/KhR6kpyCIQGf6UtKMhtnyE9\nvaHKFzxFAgMBAAECggEAB7PbYVitBbm8tBOqOhm5kIwNszJz0aH2+OLvgIysslA7\nSUj/oHHvms7hYlGtOBAW2dCd6QhTtuY1tPs1rdMthyvrCBdkP56u6s39ULUSgaPk\nijo7c8HKkhI1QOIS7SP7i2Ni00XcmR/jVqU9eP9ucW0HnqZ6bi+kkiYW21tgDFYg\nNw4rDJOfAIGkrenMJwEo7ESwfXUfbbGPeOLwaiw+nAN/RVT696K80PLZV5clF3km\ndVt2nlEWeo995tpJgWrt5t1THYswO+ovEaNJmZed6+/3NbBFTaapnbzNOwOqvaq/\nYkNRjZDkesQjgh57OxAu3YAw7DEPs56AtABbUFxksQKBgQDhQfd7M+LoncLEQmkP\nqTZ4ObICxnNbqb5UsPXuIAEw4gTxxSOrNRyh7zUW2WKXlf/Bo0JHkWN0z6Om6Rf+\n3J6kqe+LYYEGwcflIwufNXJ5FB+nfsEKI+5x6Odg+pGzvObDxsp3hLDV/RADF/In\nk8VxsKILOHK3bIqErWs1x122yQKBgQDXzBF1hLdMxu3cLk5gS5eIobsyLvGNHLZZ\nfpkMztfjX0qHpRh84WzvW+bRWPMTxK76WEdZ/f1tteUnX9nEsvsNCGVW7cxo3VLv\nRHMzVE+ylzI91hX5YW/ZhBLp1r/hO1bECcv6PS9OqH/ORXo+vcVRPxYiRcsFVczj\nlLKXFOeLnQKBgD9qJNPobY7zKuu5jn48Mvtxsq2ZVMyPYufQ0ctx8yPh3WZ7C2md\nkCv+fcGq/ViTf+bxoS0ovwkZk4bfxEOZtIfC148zqfFPCIl3bkQp9cokYizzQEEs\nkGo9GTZyFCa3nXesNT+keWwkzCcyzJdbwJAbG+NwxsrgobZsY+xF7hoRAoGBAME6\nhmufYe6KthQRFrcdGNwMTa264SoFCrcKKAuS7zc2bWsWht3TkJKnzP+p0UbjN/cM\nsx8+0f26AS4HotyBk1DxMqTrG7zOaWO7/Bd7KD33KtK570U1XUz8+V6Pn5MTajbx\nuscgoEqjkIVoKvUhQhzlC3G24vqtAGDMFjo4Srj1AoGBAJwXk/xvPIZ/gqag13O1\n9Fhit6FCzv4w/89WaCeoqQJzaNhrUx9eqavNwvUrE4k5sCU4YeS1NSMDP7vGS2JU\nN4X28QUvhuLe5VA1XRG/1CDrIkMLrHyxg5iKfJ1DdkmTE9QeieLKeKSCOAGUuC/n\nielIxPB7hci53PjdyzuYDBdb\n-----END PRIVATE KEY-----\n",
+  "client_email": "lido-svc@lido-reporting.iam.gserviceaccount.com",
+  "client_id": "112195311733840210063",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/lido-svc%40lido-reporting.iam.gserviceaccount.com"
+}
