@@ -143,10 +143,7 @@ if __name__ == "__main__":
         # Prepare for Snowflake upsert
         id_columns = ['HASH_KEY']
         insert_columns = df_dune_Data.columns
-        update_columns = ['PERIOD', 'PRIMARY_LABEL', 'SECONDARY_LABEL', 'ACCOUNT', 'CATEGORY',
-            'SUBCATEGORY', 'BASE_TOKEN_ADDRESS', 'VALUE_BASE_TOKEN', 'VALUE_USD',
-            'VALUE_ETH', 'TOKEN_PRICE', 'TOKEN_ETH_PRICE', 'QTY', 'QTY_USD',
-            'QTY_ETH', 'LAG_QTY', 'LAG_PRICE_USD', 'LAG_PRICE_ETH','HASH']
+        update_columns = insert_columns.remove('HASH_KEY')
         # Run Snowflake upsert logic
         upsert_to_snowflake(df_dune_Data,id_columns,insert_columns,update_columns,table_name,stage_name)
         print("** Data pull from Dune and upsert to Snowflake completed.")
