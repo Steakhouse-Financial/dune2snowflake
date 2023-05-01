@@ -1,1 +1,1 @@
-* * * * * /lido/jobs/hello.sh
+* * * * * /lido/jobs/hello.sh >> /var/log/cron.log 2>&1
