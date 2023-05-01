@@ -19,4 +19,4 @@ crontab $CRON_FILE
 echo "Starting cron..."
 
 # Start cron
-/etc/init.d/cron start
+crond -f
