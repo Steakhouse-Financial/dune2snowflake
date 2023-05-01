@@ -135,22 +135,25 @@ if __name__ == "__main__":
         print("Columns inserted to Snowflake are {}".format(df_dune_Data.columns))
         print("No of records from Dune is {}".format(df_dune_Data.shape[0]))
         # Remove duplicates if exists
-        df_dune_Data = df_dune_Data.drop_duplicates()
+        df_dune_Data['PERIOD'] = df_dune_Data['PERIOD'].astype('str')
+        df_dune_Data = df_dune_Data.drop_duplicates(subset='HASH_KEY', keep="first", inplace=False)
         print("No of records from after removing duplicates is {}".format(df_dune_Data.shape[0]))
+        df_dune_Data.to_csv('dune_results_hash.csv', header=True, index = False)
+        print(df_dune_Data.dtypes)
         # Prepare for Snowflake upsert
         id_columns = ['HASH_KEY']
         insert_columns = df_dune_Data.columns
         update_columns = ['PERIOD', 'PRIMARY_LABEL', 'SECONDARY_LABEL', 'ACCOUNT', 'CATEGORY',
             'SUBCATEGORY', 'BASE_TOKEN_ADDRESS', 'VALUE_BASE_TOKEN', 'VALUE_USD',
             'VALUE_ETH', 'TOKEN_PRICE', 'TOKEN_ETH_PRICE', 'QTY', 'QTY_USD',
-            'QTY_ETH', 'LAG_QTY', 'LAG_PRICE_USD', 'LAG_PRICE_ETH']
+            'QTY_ETH', 'LAG_QTY', 'LAG_PRICE_USD', 'LAG_PRICE_ETH','HASH']
         # Run Snowflake upsert logic
         upsert_to_snowflake(df_dune_Data,id_columns,insert_columns,update_columns,table_name,stage_name)
         print("** Data pull from Dune and upsert to Snowflake completed.")
         print("** Script execution completed at {}".format(datetime.now().strftime('%Y-%m-%d %H:%M:%S')))
         
         subject = "Dune 2 Snowflake execution Completed"
-        send_email(subject,"Data loaded from Dune to Snowflake successfully for date range >= {}".format(date_to_pull),recipients)
+        send_email(subject,"Data loaded from Dune to Snowflake successfully for date range >= {} and inserted {} records".format(date_to_pull,df_dune_Data.shape[0]),recipients)
         # Uptime push notification
         requests.get(os.environ.get("UPTIME_URL"))
 
