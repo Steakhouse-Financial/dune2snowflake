@@ -18,9 +18,9 @@ def pull_data_from_dune(query_id,date_to_pull):
     query = Query(
     name="@pipistrella / Lido Protocol Economics (Daily) with eth value/trp",
     query_id=query_id,
-    params=[
-        QueryParameter.date_type(name="date_from", value=date_to_pull),
-    ],
+    #params=[
+    #    QueryParameter.date_type(name="date_from", value=date_to_pull),
+    #],
 )
     #print("Results available at", query.url())
 
@@ -144,7 +144,9 @@ if __name__ == "__main__":
         # Prepare for Snowflake upsert
         id_columns = ['HASH_KEY']
         insert_columns = df_dune_Data.columns
-        update_columns = insert_columns.remove('HASH_KEY')
+        update_columns = insert_columns.to_series()
+        update_columns = update_columns.drop(labels = ['HASH_KEY'])
+        update_columns = update_columns.index
         # Run Snowflake upsert logic
         upsert_to_snowflake(df_dune_Data,id_columns,insert_columns,update_columns,table_name,stage_name)
         print("** Data pull from Dune and upsert to Snowflake completed.")
