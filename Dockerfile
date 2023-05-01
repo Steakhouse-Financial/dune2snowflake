@@ -2,6 +2,7 @@ FROM python:3.9
 
 RUN mkdir /lido
 RUN rm /bin/sh && ln -s /bin/bash /bin/sh
+RUN apt-get update && apt install nano bash dos2unix vim -y
 WORKDIR /lido
 
 ENV PYTHONDONTWRITEBYTECODE 1
@@ -11,6 +12,22 @@ ENV PYTHONUNBUFFERED 1
 RUN pip install --upgrade pip
 COPY . /lido
 RUN pip install -r requirements.txt
+RUN pip install colorama
+
+# Copy files
+COPY jobs/*.* ./jobs/
+COPY crontab.* ./
+COPY start.sh .
+
+# Fix line endings && execute permissions
+RUN dos2unix crontab.* *.sh jobs/*.* \
+    && \
+    find . -type f -iname "*.sh" -exec chmod +x {} \; \
+    && \
+    find . -type f -iname "*.py" -exec chmod +x {} \;
+
+# create cron.log file
+RUN touch /var/log/cron.log
 
 ENV SNOWFLAKE_USER=nothing
 ENV SNOWFLAKE_PASSWORD=nothing
@@ -27,6 +44,7 @@ ENV SMTP_PASSWORD=123ds
 ENV SMTP_SENDER=a@b.com
 ENV UPTIME_URL="https://uptime.teej.xyz/api/push/l5qfsgDouW?status=up&msg=OK&ping="
 
-RUN apt-get update && apt install nano -y
 
-CMD ["python", "dune_2_snowflake.py"]
+
+# Run cron on container startup
+CMD ["./start.sh"]
