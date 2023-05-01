@@ -2,7 +2,7 @@ FROM python:3.9
 
 RUN mkdir /lido
 RUN rm /bin/sh && ln -s /bin/bash /bin/sh
-RUN apt-get update && apt install nano bash dos2unix vim -y
+RUN apt-get update && apt install nano bash dos2unix vim cron -y
 WORKDIR /lido
 
 ENV PYTHONDONTWRITEBYTECODE 1
@@ -11,8 +11,7 @@ ENV PYTHONUNBUFFERED 1
 # install dependencies
 RUN pip install --upgrade pip
 COPY . /lido
-RUN pip install -r requirements.txt
-RUN pip install colorama
+RUN pip install -r requirements.txt && pip install colorama
 
 # Copy files
 COPY jobs/*.* ./jobs/
