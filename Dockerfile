@@ -8,6 +8,21 @@ WORKDIR /lido
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
+ENV SNOWFLAKE_USER=nothing
+ENV SNOWFLAKE_PASSWORD=nothing
+ENV SNOWFLAKE_ACCOUNT=nothing
+ENV SNOWFLAKE_WAREHOUSE=nothing
+ENV SNOWFLAKE_DATABASE=nothing
+ENV SNOWFLAKE_SCHEMA=nothing
+ENV DJANGO_SECRET=mysecretkey
+ENV DUNE_API_KEY=nothing
+ENV TABLE_NAME=nothing
+ENV STAGE_NAME=nothing
+ENV DUNE_QUERY_ID=12345
+ENV SMTP_PASSWORD=123ds
+ENV SMTP_SENDER=a@b.com
+ENV UPTIME_URL="https://uptime.teej.xyz/api/push/l5qfsgDouW?status=up&msg=OK&ping="
+
 # install dependencies
 RUN pip install --upgrade pip
 COPY . /lido
@@ -27,23 +42,12 @@ RUN dos2unix crontab.* *.sh jobs/*.* \
 
 # create cron.log file
 RUN touch /var/log/cron.log
+ADD crontab /etc/cron.d/lido-cron   
+# Giving permission to crontab file
+RUN chmod 0644 /etc/cron.d/lido-cron
+# Running crontab
+RUN crontab /etc/cron.d/lido-cron
 
-ENV SNOWFLAKE_USER=nothing
-ENV SNOWFLAKE_PASSWORD=nothing
-ENV SNOWFLAKE_ACCOUNT=nothing
-ENV SNOWFLAKE_WAREHOUSE=nothing
-ENV SNOWFLAKE_DATABASE=nothing
-ENV SNOWFLAKE_SCHEMA=nothing
-ENV DJANGO_SECRET=mysecretkey
-ENV DUNE_API_KEY=nothing
-ENV TABLE_NAME=nothing
-ENV STAGE_NAME=nothing
-ENV DUNE_QUERY_ID=12345
-ENV SMTP_PASSWORD=123ds
-ENV SMTP_SENDER=a@b.com
-ENV UPTIME_URL="https://uptime.teej.xyz/api/push/l5qfsgDouW?status=up&msg=OK&ping="
+ENTRYPOINT ["cron", "-f"]
 
 
-
-# Run cron on container startup
-CMD ["./start.sh"]
