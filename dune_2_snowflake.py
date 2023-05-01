@@ -132,6 +132,7 @@ if __name__ == "__main__":
         df_dune_Data.columns = map(lambda x: str(x).upper(), df_dune_Data.columns)
         # Include hash column
         df_dune_Data['HASH_KEY'] = df_dune_Data.apply(hash_row, axis=1)
+        df_dune_Data['INSERT_TS'] = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         print("Columns inserted to Snowflake are {}".format(df_dune_Data.columns))
         print("No of records from Dune is {}".format(df_dune_Data.shape[0]))
         # Remove duplicates if exists
