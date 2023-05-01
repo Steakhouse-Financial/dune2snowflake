@@ -1,1 +1,2 @@
-* * * * * /lido/jobs/hello.sh >> /var/log/cron.log 2>&1
+* * * * * /lido/jobs/hello.sh 
+0 0 * * * /lido/jobs/snowflake.sh >> /var/log/cron.log 2>&1
