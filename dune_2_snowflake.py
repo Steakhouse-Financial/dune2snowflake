@@ -52,10 +52,12 @@ def upsert_to_snowflake(df, id_columns, insert_columns, update_columns, table, s
 
         # convert to json
         filename = f"{table}.json"
+        print("Converting dataframe to JSON")
         df.to_json(filename, orient='records', lines=True, date_unit='s')
         filepath = os.path.abspath(filename)
         # it can be a good idea to systematically convert to UTC
         # timestamps will be uploaded to your default timezone if you don't
+        print("Altering timezone")
         cur.execute("alter session set timezone='UTC';")
         print("Copying file to stage")
         cur.execute(f"put file://{filepath} @{stage} overwrite=true;")
