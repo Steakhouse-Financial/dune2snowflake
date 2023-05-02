@@ -31,49 +31,51 @@ def pull_data_from_dune(query_id,date_to_pull):
     return data
 
 
-def upsert_to_snowflake(df,id_columns,insert_columns,update_columns,table,stage):
-	# Function that inserts data to Snowflake from results of Dune query
-	if df.empty: 
-		print(f'No rows to bulk upsert to {table}. Aborting.')
-		return
+def upsert_to_snowflake(df, id_columns, insert_columns, update_columns, table, stage):
+    # Function that inserts data to Snowflake from results of Dune query
+    if df.empty: 
+        print(f'No rows to bulk upsert to {table}. Aborting.')
+        return
 
-	with snowflake.connector.connect(
-		user = os.environ.get("SNOWFLAKE_USER"), 
-		password = os.environ.get("SNOWFLAKE_PASSWORD"),
-		account = os.environ.get("SNOWFLAKE_ACCOUNT"),
-		warehouse = os.environ.get("SNOWFLAKE_WAREHOUSE"), # name of a fitting warehouse
-		database = os.environ.get("SNOWFLAKE_DATABASE"),
-		schema = os.environ.get("SNOWFLAKE_SCHEMA"),
-	) as con:
+    with snowflake.connector.connect(
+        user=os.environ.get("SNOWFLAKE_USER"), 
+        password=os.environ.get("SNOWFLAKE_PASSWORD"),
+        account=os.environ.get("SNOWFLAKE_ACCOUNT"),
+        warehouse=os.environ.get("SNOWFLAKE_WAREHOUSE"), # name of a fitting warehouse
+        database=os.environ.get("SNOWFLAKE_DATABASE"),
+        schema=os.environ.get("SNOWFLAKE_SCHEMA"),
+    ) as con:
 
-		cur = con.cursor()
+        cur = con.cursor()
 
-		print(f"BULK UPSERTING {df.shape[0]} {table.upper()} TO SNOWFLAKE")
+        print(f"BULK UPSERTING {df.shape[0]} {table.upper()} TO SNOWFLAKE")
 
-		# convert to json
-		filename = f"{table}.json"
-		df.to_json(filename,orient='records',lines=True,date_unit='s')
-		filepath = os.path.abspath(filename)
+        # convert to json
+        filename = f"{table}.json"
+        df.to_json(filename, orient='records', lines=True, date_unit='s')
+        filepath = os.path.abspath(filename)
+        # it can be a good idea to systematically convert to UTC
+        # timestamps will be uploaded to your default timezone if you don't
+        cur.execute("alter session set timezone='UTC';")
+        print("Copying file to stage")
+        cur.execute(f"put file://{filepath} @{stage} overwrite=true;")
+        print("Executing Merge")
+        cur.execute(f"""merge into {table}
+                        using (select {','.join([f'$1:{col} as {col}' for col in insert_columns])}
+                            from @{stage}/{filename}) t
+                        on ({' and '.join([f't.{col} = {table}.{col}' for col in id_columns])})
+                        when matched then
+                            update set {','.join([f'{col}=t.{col}' for col in update_columns])}
+                        when not matched then insert ({','.join(insert_columns)})
+                        values ({','.join([f't.{col}' for col in insert_columns])});""")
+        # delete json file from the table stage
+        cur.execute(f"remove @{stage}/{filename};")
+        # delete the json file created
+        os.remove(filename)
+        print('\tData upsert into Snowflake completed.')
 
-		# it can be a good idea to systematically convert to UTC
-		# timestamps will be uploaded to your default timezone if you don't
-		cur.execute("alter session set timezone='UTC';")
-		cur.execute(f"put file://{filepath} @{stage} overwrite=true;")
-		cur.execute(f"""merge into {table}
-						using (select {','.join([f'$1:{col} as {col}' for col in insert_columns])}
-							from @{stage}/{filename}) t
-						on ({' and '.join([f't.{col} = {table}.{col}' for col in id_columns])})
-						when matched then
-							update set {','.join([f'{col}=t.{col}' for col in update_columns])}
-						when not matched then insert ({','.join(insert_columns)})
-						values ({','.join([f't.{col}' for col in insert_columns])});""")
-		# delete json file from the table stage
-		cur.execute(f"remove @{stage}/{filename};")
-		# delete the json file created
-		os.remove(filename)
-		print('\tData upsert into Snowflake completed.')
+        cur.close()
 
-		cur.close()
 		
 # Function to hash each row of the DataFrame
 def hash_row(row):
