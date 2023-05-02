@@ -1,6 +1,9 @@
 # dune2snowflake
+![GitHub all releases](https://img.shields.io/github/downloads/Steakhouse-Financial/dune2snowflake/total?style=for-the-badge)![GitHub pull requests](https://img.shields.io/github/issues-pr/Steakhouse-Financial/dune2snowflake?style=for-the-badge)![GitHub forks](https://img.shields.io/github/forks/Steakhouse-Financial/dune2snowflake?style=for-the-badge)![GitHub Repo stars](https://img.shields.io/github/stars/Steakhouse-Financial/dune2snowflake?style=for-the-badge)![GitHub last commit](https://img.shields.io/github/last-commit/Steakhouse-Financial/dune2snowflake?style=for-the-badge)
 
-## How to run via docker
+## 🔧 How to Install
+
+### 🐳 Docker
 ```
 docker run \
  --name dune2snow \
