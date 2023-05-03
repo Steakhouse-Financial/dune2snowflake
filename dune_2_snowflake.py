@@ -184,7 +184,7 @@ def process_snowflake():
     # Run Snowflake upsert logic
     upsert_to_snowflake(df_dune_Data,id_columns,insert_columns,update_columns,table_name,stage_name)
 
-def process_postgresql():
+def process_postgresql(df_dune_Data):
     # Define parameters needed
     table_name = os.environ.get("TABLE_NAME")
     schema_name = os.environ.get("SCHEMA")
@@ -237,7 +237,7 @@ if __name__ == "__main__":
         df_dune_Data = pull_data_from_dune(query_id,date_to_pull)
         # Comment above and uncomment below for quick testing
         #df_dune_Data = pd.read_csv('dune_results.csv')
-        process_postgresql()
+        process_postgresql(df_dune_Data)
         
         print("** Data pull from Dune and upsert to Postgresql completed.")
         print("** Script execution completed at {}".format(datetime.now().strftime('%Y-%m-%d %H:%M:%S')))
