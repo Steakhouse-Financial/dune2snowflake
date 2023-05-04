@@ -6,6 +6,7 @@ from dune_client.types import QueryParameter
 from dune_client.client import DuneClient
 from dune_client.query import Query
 import hashlib, time
+from hashlib import md5
 import os, sys, requests
 import argparse
 from datetime import datetime, timedelta
@@ -22,9 +23,9 @@ def pull_data_from_dune(query_id,date_to_pull):
     query = Query(
     name="@pipistrella / Lido Protocol Economics (Daily) with eth value/trp",
     query_id=query_id,
-    #params=[
-    #    QueryParameter.date_type(name="date_from", value=date_to_pull),
-    #],
+    params=[
+        QueryParameter.date_type(name="date_from", value=date_to_pull),
+    ],
 )
     #print("Results available at", query.url())
 
@@ -192,8 +193,14 @@ def process_postgresql(df_dune_Data):
     # Convert columns to uppercase
     df_dune_Data.columns = map(lambda x: str(x).lower(), df_dune_Data.columns)
     # Include hash column
-    df_dune_Data['hash_key'] = df_dune_Data.apply(hash_row, axis=1)
-    df_dune_Data['insert_ts'] = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    df_dune_Data['hash_key'] = df_dune_Data['period'] + df_dune_Data['primary_label'] + df_dune_Data['secondary_label'] + df_dune_Data['account'] + df_dune_Data['category'] + df_dune_Data['subcategory'] + \
+        df_dune_Data['base_token_address'] + df_dune_Data['value_base_token'] + df_dune_Data['value_usd'] + \
+        df_dune_Data['token_price'] + \
+        df_dune_Data['qty_usd'] + df_dune_Data['hash']
+    
+    df_dune_Data['hash_key'] = df_dune_Data['hash_key'].apply(
+                lambda x: md5(x.encode("utf8")).hexdigest())
+    #df_dune_Data['insert_ts'] = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     print("Columns inserted to Postgresql are {}".format(df_dune_Data.columns))
     print("No of records from Dune is {}".format(df_dune_Data.shape[0]))
     # Remove duplicates if exists
