@@ -193,10 +193,10 @@ def process_postgresql(df_dune_Data):
     # Convert columns to uppercase
     df_dune_Data.columns = map(lambda x: str(x).lower(), df_dune_Data.columns)
     # Include hash column
-    df_dune_Data['hash_key'] = df_dune_Data['period'] + df_dune_Data['primary_label'] + df_dune_Data['secondary_label'] + df_dune_Data['account'] + df_dune_Data['category'] + df_dune_Data['subcategory'] + \
-        df_dune_Data['base_token_address'] + df_dune_Data['value_base_token'] + df_dune_Data['value_usd'] + \
-        df_dune_Data['token_price'] + \
-        df_dune_Data['qty_usd'] + df_dune_Data['hash']
+    df_dune_Data['hash_key'] = df_dune_Data['period'].astype(str) + df_dune_Data['primary_label'].astype(str) + df_dune_Data['secondary_label'].astype(str) + df_dune_Data['account'].astype(str) + df_dune_Data['category'].astype(str) + df_dune_Data['subcategory'].astype(str) + \
+        df_dune_Data['base_token_address'].astype(str) + df_dune_Data['value_base_token'].astype(str) + df_dune_Data['value_usd'].astype(str) + \
+        df_dune_Data['token_price'].astype(str) + \
+        df_dune_Data['qty_usd'].astype(str) + df_dune_Data['hash'].astype(str)
     
     df_dune_Data['hash_key'] = df_dune_Data['hash_key'].apply(
                 lambda x: md5(x.encode("utf8")).hexdigest())
