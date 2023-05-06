@@ -48,6 +48,6 @@ RUN chmod 0644 /etc/cron.d/lido-cron
 # Running crontab
 RUN crontab /etc/cron.d/lido-cron
 
-ENTRYPOINT ["cron", "-f"]
-
+#ENTRYPOINT ["cron", "-f"]
+CMD ["/bin/bash", "-c", "printenv > /etc/environment && cron -f"]
 
